@@ -1,6 +1,10 @@
 {
   "entryPoints": [
-    "./src/basicFunctions.ts"
+    "./src/mod-ejercicio-1/collectable.ts",
+    "./src/mod-ejercicio-1/printable.ts",
+    "./src/mod-ejercicio-1/printableCollection.ts",
+    "./src/mod-ejercicio-1/numericPrintableCollection.ts",
+    "./src/mod-ejercicio-1/stringPrintableCollection.ts",
   ],
   "out": "./docs"
 }
