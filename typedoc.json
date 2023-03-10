@@ -5,6 +5,18 @@
     "./src/mod-ejercicio-1/printableCollection.ts",
     "./src/mod-ejercicio-1/numericPrintableCollection.ts",
     "./src/mod-ejercicio-1/stringPrintableCollection.ts",
+    "./src/ejercicio-1/streamable.ts",
+    "./src/ejercicio-1/basicStreamableCollection.ts",
+    "./src/ejercicio-1/seriesCollection.ts",
+    "./src/ejercicio-1/moviesCollection.ts",
+    "./src/ejercicio-1/documentalsCollection.ts",
+    "./src/ejercicio-2/list.ts",
+    "./src/ejercicio-3/album.ts",
+    "./src/ejercicio-3/artist.ts",
+    "./src/ejercicio-3/musicLibrary.ts",
+    "./src/ejercicio-3/song.ts",
+    "./src/ejercicio-3/single.ts",
+    "./src/ejercicio-3/discography.ts",
   ],
   "out": "./docs"
 }
