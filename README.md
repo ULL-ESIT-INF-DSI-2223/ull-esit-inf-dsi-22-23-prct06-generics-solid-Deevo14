@@ -267,3 +267,385 @@ Esta clase contiene:
 - El método forEach recibe una función que recibe un elemento de tipo T y no devuelve nada y realiza una acción sobre cada elemento del array.
 
 ### Ejercicio 3 - Ampliando la biblioteca musical
+
+Para este ejercicio he modificado algunos ficheros del ejercicio anterior y agregado nuevos:
+
+- Clase Song:
+
+```
+export class Song {
+  private _name: string;
+  private _duration: number;
+  private _genres: string[];
+  private _single: boolean;
+  private _plays: number;
+  private _version?: string;
+
+  constructor(
+    name: string,
+    duration: number,
+    genres: string[],
+    single: boolean,
+    plays: number,
+    version?: string
+  ) {
+    this._name = name;
+    this._duration = duration;
+    this._genres = genres;
+    this._single = single;
+    this._plays = plays;
+    this._version = version;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  set name(name: string) {
+    this._name = name;
+  }
+
+  get duration(): number {
+    return this._duration;
+  }
+
+  set duration(duration: number) {
+    this._duration = duration;
+  }
+
+  get genres(): string[] {
+    return this._genres;
+  }
+
+  set genres(genres: string[]) {
+    this._genres = genres;
+  }
+
+  get single(): boolean {
+    return this._single;
+  }
+
+  set single(single: boolean) {
+    this._single = single;
+  }
+
+  get plays(): number {
+    return this._plays;
+  }
+
+  set plays(plays: number) {
+    this._plays = plays;
+  }
+
+  get version(): string | undefined {
+    return this._version;
+  }
+
+  set version(version: string | undefined) {
+    this._version = version;
+  }
+}
+```
+A esta clase le hemos añadido el atributo *version* como opcional, para saber la version que tiene. Si solo tiene una 
+version sera *undefined*.
+
+- Clase Album:
+
+```
+export class Album {
+  private _name: string;
+  private _year: number;
+  private _songs: Song[];
+
+  constructor(name: string, year: number, songs: Song[]) {
+    this._name = name;
+    this._year = year;
+    this._songs = songs;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  set name(name: string) {
+    this._name = name;
+  }
+
+  get year(): number {
+    return this._year;
+  }
+
+  set year(year: number) {
+    this._year = year;
+  }
+
+  get songs(): Song[] {
+    return this._songs;
+  }
+
+  set songs(songs: Song[]) {
+    this._songs = songs;
+  }
+}
+
+export class AlbumCollection {
+  private _albums: Album[];
+
+  constructor(albums: Album[]) {
+    this._albums = albums;
+  }
+
+  get albums(): Album[] {
+    return this._albums;
+  }
+
+  set albums(albums: Album[]) {
+    this._albums = albums;
+  }
+}
+```
+
+En album hemos añadido otra clase para crear colecciones de albumnes, con su getter y setter para un array de albumnes.
+
+- Clase Single:
+```
+import { Song } from "./song";
+
+export class Single{
+    private _name: string;
+    private _year: number;
+    private _song: Song[];
+
+    constructor(name: string, year: number, song: Song[]){
+        this._name = name;
+        this._year = year;
+        this._song = song;
+    }
+
+    get name(): string{
+        return this._name;
+    }
+
+    set name(name: string){
+        this._name = name;
+    }
+
+    get year(): number{
+        return this._year;
+    }
+
+    set year(year: number){
+        this._year = year;
+    }
+
+    get song(): Song[]{
+        return this._song;
+    }
+
+    set song(song: Song[]){
+        this._song = song;
+    }
+}
+
+export class SingleCollection{
+    private _singles: Single[];
+
+    constructor(singles: Single[]){
+        this._singles = singles;
+    }
+
+    get singles(): Single[]{
+        return this._singles;
+    }
+
+    set singles(singles: Single[]){
+        this._singles = singles;
+    }
+}
+```
+Mismo funcionamiento que la clase Album, pero este la usamos para almacenar un single con sus posibles versiones.
+Tenemos una clase para cada Single y otra para colleciones de Singles.
+
+- Clase generica Discography:
+
+```
+export class Discography<T extends SingleCollection | AlbumCollection> {
+    private _items: T[];
+
+    constructor(items: T[]) {
+        this._items = items;
+    }
+
+    get items(): T[] {
+        return this._items;
+    }
+
+    set items(items: T[]) {
+        this._items = items;
+    }
+}
+```
+Para la discografia del artista, hemos creado una clase generica Discography, donde tenemos como tipo de dato una
+collecion de singles o de albumnes. Tenemos su constructos y su getter y setter.
+
+- Clase Artist:
+
+```
+export class Artist<T extends SingleCollection | AlbumCollection> {
+    private _name: string;
+    private _monthlyListeners: number;
+    private _discography: Discography<T>;
+
+    constructor(name: string, monthlyListeners: number, discography: Discography<T>) {
+        this._name = name;
+        this._monthlyListeners = monthlyListeners;
+        this._discography = discography;
+    }   
+
+    get name(): string {
+        return this._name;
+    }
+
+    set name(name: string) {
+        this._name = name;
+    }
+
+    get monthlyListeners(): number {
+        return this._monthlyListeners;
+    }
+
+    set monthlyListeners(monthlyListeners: number) {
+        this._monthlyListeners = monthlyListeners;
+    }
+
+    get discography(): Discography<T> {
+        return this._discography;
+    }
+
+    set discography(discography: Discography<T>) {
+        this._discography = discography;
+    }
+}
+```
+
+A la clase Artist le he hecho varios cambios. La he convertido en generica para poder pasarle el tipo de dato que va 
+a contener la discografia del artista. Depues solo he cambiado el atributo, constructor y metodo de discografia para ajustarlo
+a la clase generica nueva.
+
+- Clase MusicLibrary:
+```
+export class MusicLibrary {
+    private _artists: Artist<SingleCollection | AlbumCollection>[];
+
+    constructor(artistas: Artist<SingleCollection | AlbumCollection>[]) {
+        this._artists = artistas;
+    }
+
+    get artistas(): Artist<SingleCollection | AlbumCollection>[] {
+        return this._artists;
+    }
+
+    set artistas(artistas: Artist<SingleCollection | AlbumCollection>[]) {
+        this._artists = artistas;
+    }
+}
+```
+
+A esta clase me faltaron por modificar todos los metodos del anterior ejercicio para ajustarlos a las nuevas clases genericas,
+pero no me ha dado tiempo.
+
+### Ejercicio Modificacion Clase
+
+Para el ejercicio de clase hemos creado:
+
+- Interfaz generica Collectable:
+
+```
+export interface Collectable<T> {
+  addItem(newItem: T): void;
+  getItem(index: number): T;
+  removeItem(index: number): T;
+  getNumberOfItems(): number;
+}
+```
+Hemos definido todos los metodos que vamos a necesitar.
+
+
+- Printable:
+```
+export interface Printable<T> {
+  print(): void;
+}
+```
+Interfaz que usaremos solo para el metodo de imprimir.
+
+
+- Printable Collection:
+```
+export abstract class PrintableCollection<T> implements Collectable<T>, Printable<T> {
+
+  constructor(private items: T[]) {}
+
+  addItem(newItem: T): void {
+    this.items.push(newItem);
+  }
+
+  getItem(index: number): T {
+    return this.items[index];
+  }
+
+  removeItem(index: number): T {
+    const aux: T[] = this.items.splice(index, 1);
+    return aux[0];
+  }
+
+  getNumberOfItems(): number {
+    return this.items.length;
+  }
+  
+  abstract print(): void;
+}
+```
+
+Esta clase abstracta implementa las interfaces Collectable y Printable. Tenedremos un array de items
+para guardar los elementos, y ademos implementamos todos los metodos menos el de imprimir, que sera
+especifico para cada tipo de dato.
+
+- NumericPrintableCollection:
+```
+export class NumericPrintableCollection extends PrintableCollection<number> {
+    constructor(private numbers: number[]) {
+      super(numbers);
+    }
+    
+    print(): void {
+      const out = this.numbers.join(", ");
+      console.log(out);
+    }
+  }
+```
+Esta subclase sera para implementar de manera concreta el metodo print. Ademas, heredara el 
+resto de metodos de la clase padre.
+
+- StringPrintableCollection:
+```
+export class StringPrintableCollection extends PrintableCollection<string> {
+  constructor(private strings: string[]) {
+    super(strings);
+  }
+
+  print(): void {
+    const out = this.strings.join(", ");
+    console.log(out);
+  }
+}
+```
+Al igual que la otra subclase, implementaremos el metodo print y tenedremos el resto de metodos heredados.
+
+## Conlcusiones
+
+Esta práctica me ha resultado más complicada que las anteriores, principalmente por el tema de saber elegir correctamente la 
+estructura de clases e interfaces. Por ejemplo, se que el ejercicio 3 no esta correctamente estructurado, pero no se me ocurrio
+otra forma de hacerlo. Pero por el contrario, el ejercicio de clase me resulto muy fácil ya que era mucho mas guiado el enunciado.
+En cuanto a compresión de la teoría de interfaces y clases genéricas y principios SOLID creo que lo entiendo todo bien, pero los problemas
+son cuando tengo que decidir yo la estructura de cada ejercicio, que no se cual es la más correcta.
